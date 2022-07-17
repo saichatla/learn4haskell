@@ -209,31 +209,39 @@ So, the output in this example means that 'False' has type 'Bool'.
 > Try to guess first and then compare your expectations with GHCi output
 
 >>> :t True
-<True :: Bool>
+WAS <True :: Bool>
+NOW True :: Bool
 >>> :t 'a'
-<'a' :: Char>
+WAS <'a' :: Char>
+NOW 'a' :: Char
 >>> :t 42
-<42 :: Num>
+WAS <42 :: Num>
+NOW 42 :: Num p => p
 
 A pair of boolean and char:
 >>> :t (True, 'x')
-<(True, 'x') :: (Bool, Char)>
+WAS <(True, 'x') :: (Bool, Char)>
+NOW (True, 'x') :: (Bool, Char)
 
 Boolean negation:
 >>> :t not
-<not :: Bool -> Bool>
+WAS <not :: Bool -> Bool>
+NOW not :: Bool -> Bool
 
 Boolean 'and' operator:
 >>> :t (&&)
-<(&&) :: Bool -> Bool -> Bool>
+WAS <(&&) :: Bool -> Bool -> Bool>
+NOW (&&) :: Bool -> Bool -> Bool
 
 Addition of two numbers:
 >>> :t (+)
-<:: Num a => a -> a -> a>
+WAS <:: Num a => a -> a -> a>
+NOW (+) :: Num a => a -> a -> a
 
 Maximum of two values:
 >>> :t max
-<max :: Ord a => a -> a -> a>
+WAS <max :: Ord a => a -> a -> a>
+NOW max :: Ord a => a -> a -> a
 
 You might not understand each type at this moment, but don't worry! You've only
 started your Haskell journey. Types will become your friends soon.
@@ -361,9 +369,7 @@ scripts together.
 =🛡= Defining a function
 
 We have already learned how to use different functions and operators in Haskell.
-Let's now check how they are defined and whether we can introduce our own.
-
-When defining a function in Haskell, you write its type signature on the first
+Let's now check how they are defined and whether we can introduce our error "firstDigit: Not implemented!"he first
 line, and then its body on the following line(s). The type signature should be
 written immediately from the start of a line. Haskell is an __indentation-__ and
 __layout-sensitive__ language, so this is important to keep in mind.
@@ -429,6 +435,7 @@ task is to specify the type of this function.
 49
 -}
 
+squareSum :: Int -> Int -> Int
 squareSum x y = (x + y) * (x + y)
 
 
@@ -449,7 +456,7 @@ Implement the function that takes an integer value and returns the next 'Int'.
   function body with the proper implementation.
 -}
 next :: Int -> Int
-next x = error "next: not implemented!"
+next x = x + 1
 
 {- |
 After you've implemented the function (or even during the implementation), you
@@ -465,10 +472,7 @@ last loaded module by merely typing the ":r" command (no need to specify the
 name again).
 
 ghci> :r
-
-A typical workflow looks like this: you load the module once using the ":l"
-command, and then you should reload it using the ":r" command each time you
-change it and want to check your changes.
+error "firstDigit: Not implemented!"
 -}
 
 {- |
@@ -490,7 +494,8 @@ Implement a function that returns the last digit of a given number.
   whether it works for you!
 -}
 -- DON'T FORGET TO SPECIFY THE TYPE IN HERE
-lastDigit n = error "lastDigit: Not implemented!"
+lastDigit :: Int -> Int
+lastDigit n = mod n 10
 
 
 {- |
@@ -520,7 +525,7 @@ branches because it is an expression and it must always return some value.
   satisfying the check will be returned and, therefore, evaluated.
 -}
 closestToZero :: Int -> Int -> Int
-closestToZero x y = error "closestToZero: not implemented!"
+closestToZero x y = if abs(x) < abs(y) then x else y
 
 
 {- |
@@ -554,7 +559,11 @@ value after "=" where the condition is true.
 Casual reminder about adding top-level type signatures for all functions :)
 -}
 
-mid x y z = error "mid: not implemented!"
+mid :: Int -> Int -> Int -> Int
+mid x y z 
+        | x < y && y < z = y
+        | y < x && x < z = x
+        | otherwise = z
 
 {- |
 =⚔️= Task 8
@@ -568,7 +577,19 @@ True
 >>> isVowel 'x'
 False
 -}
-isVowel c = error "isVowel: not implemented!"
+isVowel :: Char -> Bool
+isVowel c
+        | c == 'a' = True
+        | c == 'e' = True
+        | c == 'i' = True
+        | c == 'o' = True
+        | c == 'u' = True
+        | otherwise = False
+
+        
+
+
+
 
 
 {- |
@@ -632,10 +653,17 @@ Try to introduce variables in this task (either with let-in or where) to avoid
 specifying complex expressions.
 -}
 
-sumLast2 n = error "sumLast2: Not implemented!"
+sumLast2 :: Int -> Int 
+sumLast2 n = lastN  n + secondN n
+ where
+  lastN:: Int -> Int 
+  lastN num = lastDigit num
+  secondN:: Int -> Int 
+  secondN num = lastN (div num 10) 
+    
 
 
-{- |
+{- |error "firstDigit: Not implemented!"
 =💣= Task 10*
 
 You did it! You've passed all the challenges in your first training!
@@ -653,7 +681,8 @@ You need to use recursion in this task. Feel free to return to it later, if you
 aren't ready for this boss yet!
 -}
 
-firstDigit n = error "firstDigit: Not implemented!"
+firstDigit :: Int -> Int
+firstDigit n = if n <= 9 then n else firstDigit(div n 10)
 
 
 {-
